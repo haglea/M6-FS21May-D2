@@ -2,7 +2,20 @@ import db from "../../db/connection.js";
 
 export const list = async (req, res, next) => {
     try {
-        const reviews = await db.query(`SELECT * FROM reviews`)
+        const reviews = await db.query(`SELECT
+		review.review_id,
+		review.comment,
+		review.rate,
+		review.product_id,
+		review.created_at,
+		product.name,
+		product.description,
+		product.brand,
+		product.image_url,
+		product.price,
+		product.category
+		FROM reviews AS review
+		INNER JOIN products AS product ON review.product_id=product.product_id ORDER BY review.created_at DESC;`);
         res.send(reviews.rows);
     } catch (error) {
         res.status(500).send(error);
@@ -25,7 +38,22 @@ export const single = async (req, res, next) => {
 	try {
 		const { review_id } = req.params;
 		const reviews = await db.query(
-			`SELECT * FROM reviews WHERE review_id=${review_id};`
+			`SELECT
+			review.review_id,
+			review.comment,
+			review.rate,
+			review.product_id,
+			review.created_at,
+			product.name,
+			product.description,
+			product.brand,
+			product.image_url,
+			product.price,
+			product.category
+			FROM reviews AS review
+			INNER JOIN products AS product ON review.product_id=product.product_id 
+			WHERE review_id=${review_id}
+			ORDER BY review.created_at DESC`			
 		);
 		const [found, ...rest] = reviews.rows;
 
@@ -38,12 +66,13 @@ export const single = async (req, res, next) => {
 export const update = async (req, res, next) => {
 	try {
 		const { review_id } = req.params;
-		const { comment, rate } = req.body;
+		const { comment, rate, product_id } = req.body;
 		const reviews = await db.query(
 			`UPDATE reviews
-			 SET comment ='${comment}',
-			 rate = ${rate},
-			 updated_at = NOW()
+			 SET comment='${comment}',
+			 rate=${rate},
+			 product_id=${product_id},
+			 updated_at=NOW()
 			 WHERE review_id=${review_id} RETURNING *;`
 		);
 		const [found, ...rest] = reviews.rows;

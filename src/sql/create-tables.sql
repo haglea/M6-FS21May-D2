@@ -22,5 +22,5 @@ CREATE TABLE
     comment VARCHAR(255) NOT NULL,
     rate INTEGER NOT NULL,
     product_id INTEGER REFERENCES products ON DELETE CASCADE,
-    createdAt TIMESTAMPTZ DEFAULT NOW()    
+    created_at TIMESTAMPTZ DEFAULT NOW()    
  );
