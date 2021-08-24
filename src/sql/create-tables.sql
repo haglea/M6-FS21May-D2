@@ -1,5 +1,5 @@
-/* DROP TABLE IF EXISTS public.products  CASCADE;
-DROP TABLE IF EXISTS public.reviews  CASCADE; */
+/* DROP TABLE IF EXISTS public.products  CASCADE; 
+DROP TABLE IF EXISTS public.reviews CASCADE; */
 
 CREATE TABLE 
  IF NOT EXISTS 
@@ -24,4 +24,3 @@ CREATE TABLE
     product_id INTEGER REFERENCES products ON DELETE CASCADE,
     createdAt TIMESTAMPTZ DEFAULT NOW()    
  );
-       

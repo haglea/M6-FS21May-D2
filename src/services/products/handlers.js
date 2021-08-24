@@ -13,9 +13,9 @@ export const create = async (req, res, next) => {
     try {
         const { name, description, brand, image_url, price, category } = req.body;
 		const product = await db.query(
-			`INSERT INTO products (name,description,brand,image_url,price,category) VALUES ('${name}','${description}','${brand}','${image_url}','${price}','${category}') RETURNING *;`
+			`INSERT INTO products (name,description,brand,image_url,price,category) VALUES ('${name}','${description}','${brand}','${image_url}',${price},'${category}') RETURNING *;`
 		);
-        res.send(product);
+        res.send(product.rows);
     } catch (error) {
         res.status(500).send(error);
     }
@@ -45,7 +45,7 @@ export const update = async (req, res, next) => {
 			 description = '${description}',
 			 brand = '${brand}',
              image_url = '${image_url}',
-             price = '${price}',
+             price = ${price},
              category = '${category}',
 			 updated_at = NOW()
 			 WHERE product_id=${product_id} RETURNING *;`
